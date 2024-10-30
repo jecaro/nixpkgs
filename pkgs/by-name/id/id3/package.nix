@@ -1,6 +1,7 @@
 {
   fetchFromGitHub,
   lib,
+  libiconv,
   stdenv,
 }:
 
@@ -12,17 +13,19 @@ stdenv.mkDerivation rec {
     owner = "squell";
     repo = "id3";
     rev = "${version}";
-    sha256 = "+h1wwgTB7CpbjyUAK+9BNRhmy83D+1I+cZ70E1m3ENk=";
+    hash = "sha256-+h1wwgTB7CpbjyUAK+9BNRhmy83D+1I+cZ70E1m3ENk=";
   };
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   makeFlags = [ "prefix=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Portable command-line mass tagger";
     homepage = "https://squell.github.io/id3/";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ jecaro ];
-    platforms = with platforms; unix;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ jecaro ];
+    platforms = lib.platforms.unix;
     mainProgram = "id3";
   };
 }
